@@ -83,7 +83,7 @@ st.title('ZAMAKAN LENS')
 # Add a file uploader in the sidebar
 with st.sidebar:
     try:
-        with open(r"/Users/anody/Downloads/logo.png", "rb") as image_file:
+        with open(r"logo.png", "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
         img = f"<img src='data:image/png;base64,{encoded_string}' alt='App Logo' style='width:200px;3height:auto;'>"
         st.markdown(img, unsafe_allow_html=True)
