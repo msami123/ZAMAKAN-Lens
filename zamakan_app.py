@@ -35,7 +35,6 @@ def visualize_data(code):
     except Exception as e:
         st.error(f"Error executing code: {e}")
 
-# Chatbot utility functions
 def dataframe_to_text(df):
     if isinstance(df, pd.DataFrame):
         return df.to_string(index=False)
@@ -78,7 +77,7 @@ def ask_chatgpt_about_data(query, data, response_type, color, bgcolor, title_siz
 
 # Create the Streamlit app
 st.set_page_config(layout="wide")
-st.title('ZAMAKAN LENS')
+st.title('Welcome To IAMAI VIZ')
 
 # Add a file uploader in the sidebar
 with st.sidebar:
@@ -96,13 +95,15 @@ with st.sidebar:
     title_size = st.slider("Title Font Size", 10, 50, 24, key="title_size")
     axis_label_size = st.slider("Axis Label Font Size", 10, 30, 18, key="axis_label_size")
     legend_size = st.slider("Legend Font Size", 10, 30, 14, key="legend_size")
-    st.sidebar.info("""
-    **ZAMAKAN LENS: Data Visualization Tool**
+    with st.sidebar:
+        with st.expander("About IAMAI VIZ !!", expanded=False):  # Set expanded to False to hide it initially
+            st.markdown("""
+            **IAMAI VIZ: Data Visualization Tool**
 
-    This interactive tool helps users visualize data efficiently. Leveraging advanced AI capabilities, users can ask questions about their data through an integrated chatbot for real-time insights.
+            This interactive tool helps users visualize data efficiently. Leveraging advanced AI capabilities, users can ask questions about their data through an integrated chatbot for real-time insights.
 
-    **Created by M&M**
-    """)
+            **developed by M&M**
+            """)
 
 if uploaded_file is not None:
     df = load_data(uploaded_file)
