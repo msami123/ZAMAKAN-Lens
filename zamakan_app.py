@@ -1,22 +1,16 @@
 import openai
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import plotly.express as px
 import base64
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LinearRegression
 import streamlit as st
-import os
+import plotly.express as px  # Import Plotly Express
 
 # Set your API key directly
-openai.api_key = "sk-your-api-key"
+openai.api_key = "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"
 
 def gpt4_query(messages):
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4o",
+            model="gpt-4",
             messages=messages
         )
         return response.choices[0].message['content'].strip()
@@ -84,7 +78,7 @@ with st.sidebar:
     try:
         with open(r"iAMAi-Viz-logo-03.png", "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
-        img = f"<img src='data:image/png;base64,{encoded_string}' alt='App Logo' style='width:auto;3height:auto;'>"
+        img = f"<img src='data:image/png;base64,{encoded_string}' alt='App Logo' style='width:auto;height:auto;'>"
         st.markdown(img, unsafe_allow_html=True)
     except FileNotFoundError:
         st.error("Logo image not found. Please ensure the path is correct.")
@@ -108,27 +102,33 @@ with st.sidebar:
 if uploaded_file is not None:
     df = load_data(uploaded_file)
     st.session_state.selected_datasets = df.columns.tolist()
-    # Chatbot Section
-    st.subheader("Data Visualization ")
-    if 'messages' not in st.session_state:
-        st.session_state['messages'] = [{"role": "assistant", "content": "How can I help you?"}]
-    if 'history' not in st.session_state:
-        st.session_state['history'] = []
-    for msg in st.session_state.messages:
-        st.chat_message(msg["role"]).write(msg["content"])
-    if st.session_state.selected_datasets:
-        if prompt := st.chat_input("Ask the chatbot about your data..."):
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            st.chat_message("user").write(prompt)
-            response_text = ask_chatgpt_about_data(prompt, df, response_type, color, bgcolor, title_size, axis_label_size, legend_size)
-            st.session_state.messages.append({"role": "assistant", "content": response_text})
-            st.chat_message("assistant").write(response_text)
-            st.session_state.history.append({"user": prompt, "assistant": response_text})
-    else:
-        st.info("Please submit datasets to query.")
-    st.subheader('Data Preview')
-    with st.expander('Data Preview'):
-        st.dataframe(df)
+
+    # Create columns for layout
+    col1, col2 = st.columns([2, 1])
+
+    with col1:
+        st.subheader("Data Visualization")
+        if 'messages' not in st.session_state:
+            st.session_state['messages'] = [{"role": "assistant", "content": "How can I help you?"}]
+        if 'history' not in st.session_state:
+            st.session_state['history'] = []
+        for msg in st.session_state.messages:
+            st.chat_message(msg["role"]).write(msg["content"])
+        if st.session_state.selected_datasets:
+            if prompt := st.chat_input("Ask the chatbot about your data..."):
+                st.session_state.messages.append({"role": "user", "content": prompt})
+                st.chat_message("user").write(prompt)
+                response_text = ask_chatgpt_about_data(prompt, df, response_type, color, bgcolor, title_size, axis_label_size, legend_size)
+                st.session_state.messages.append({"role": "assistant", "content": response_text})
+                st.chat_message("assistant").write(response_text)
+                st.session_state.history.append({"user": prompt, "assistant": response_text})
+        else:
+            st.info("Please submit datasets to query.")
+    
+    with col2:
+        st.subheader('Data Preview')
+        with st.expander('Data Preview'):
+            st.dataframe(df)
 
     st.subheader('Data Visualization')
     with st.expander('Visualize Data'):
@@ -146,16 +146,12 @@ if uploaded_file is not None:
                     fig.update_traces(texttemplate='%{text:.2f}', textposition='outside')
                     st.plotly_chart(fig)
                 elif visualization_type == 'Line Chart':
-                    # Check if 'Attributes' can be converted to a more appropriate type and sort it if it's an object
                     if question_data['Attributes'].dtype == 'O':
-                        # Attempt to convert 'Attributes' to a categorical type with ordered categories if necessary
                         question_data['Attributes'] = pd.Categorical(question_data['Attributes'], categories=sorted(
                             question_data['Attributes'].unique()), ordered=True)
                         question_data = question_data.sort_values(by='Attributes')
-
-                    # Plotting the line chart with a single color
                     fig = px.line(question_data, x='Attributes', y='Audience %', title=question)
-                    fig.update_traces(line=dict(color=color))  # Set the line color here
+                    fig.update_traces(line=dict(color=color))
                     fig.update_layout(
                         xaxis_title='Attributes',
                         yaxis_title='Audience %',
