@@ -71,7 +71,7 @@ def ask_chatgpt_about_data(query, data, response_type, color, bgcolor, title_siz
 
 # Create the Streamlit app
 st.set_page_config(layout="wide")
-st.title('Welcome To IAMAI VIZ')
+st.title('Your Audience Insights Begins here.')
 
 # Add a file uploader in the sidebar
 with st.sidebar:
