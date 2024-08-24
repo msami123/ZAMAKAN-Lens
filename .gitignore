@@ -76,6 +76,7 @@ Thumbs.db
 *.sublime-workspace
 
 # Streamlit-specific
+.streamlit/credentials.toml
 
 
 # Images and binary files (optional)
