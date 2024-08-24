@@ -1,0 +1,5 @@
+
+# Configuration for Streamlit
+
+[theme]
+base = "dark"
