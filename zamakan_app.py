@@ -104,9 +104,9 @@ if uploaded_file is not None:
     st.session_state.selected_datasets = df.columns.tolist()
 
     # Create columns for layout
-    col1, col2 = st.columns([2, 1])
+     col = st.container()
 
-    with col1:
+    with col:
         st.subheader("Data Visualization")
         if 'messages' not in st.session_state:
             st.session_state['messages'] = [{"role": "assistant", "content": "How can I help you?"}]
@@ -118,14 +118,14 @@ if uploaded_file is not None:
             if prompt := st.chat_input("Ask the chatbot about your data..."):
                 st.session_state.messages.append({"role": "user", "content": prompt})
                 st.chat_message("user").write(prompt)
-                response_text = ask_chatgpt_about_data(prompt, df, response_type, color, bgcolor, title_size, axis_label_size, legend_size)
+                response_text = ask_chatgpt_about_data(prompt, df, response_type, color, bgcolor, title_size,
+                                                       axis_label_size, legend_size)
                 st.session_state.messages.append({"role": "assistant", "content": response_text})
                 st.chat_message("assistant").write(response_text)
                 st.session_state.history.append({"user": prompt, "assistant": response_text})
         else:
             st.info("Please submit datasets to query.")
-    
-    with col2:
+
         st.subheader('Data Preview')
         with st.expander('Data Preview'):
             st.dataframe(df)
