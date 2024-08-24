@@ -6,47 +6,6 @@ import plotly.express as px  # Import Plotly Express
 
 # Set your API key directly
 openai.api_key = "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"
-# Enforce dark mode via page config (without 'theme' argument)
-st.set_page_config(
-    layout="wide",
-    page_title="Your Audience Insights"
-)
-
-# Streamlit dark mode CSS
-st.markdown(
-    """
-    <style>
-        /* Global background color */
-        body {
-            background-color: #0E1117;
-            color: #FFFFFF;
-        }
-        /* Sidebar settings */
-        .css-1d391kg {
-            background-color: #262730;
-            color: #FFFFFF;
-        }
-        /* Widget background settings */
-        .stRadio, .stSlider, .stColorPicker, .stSelectbox {
-            background-color: #262730;
-        }
-        /* Header settings */
-        .css-18ni7ap h1 {
-            color: #1DB954;
-        }
-        /* Chat message settings */
-        .stChatMessage {
-            background-color: #262730;
-            color: #FFFFFF;
-        }
-        /* Expander settings */
-        .stExpander {
-            background-color: #262730;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 
 def gpt4_query(messages):
@@ -118,6 +77,7 @@ def ask_chatgpt_about_data(query, data, response_type, color, bgcolor, title_siz
 
 
 # Create the Streamlit app
+st.set_page_config(layout="wide")
 st.title('Your Audience Insights Begins Here.')
 
 # Add a file uploader in the sidebar
