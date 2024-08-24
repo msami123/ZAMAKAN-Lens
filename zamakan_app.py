@@ -7,6 +7,7 @@ import plotly.express as px  # Import Plotly Express
 # Set your API key directly
 openai.api_key = "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"
 
+
 def gpt4_query(messages):
     try:
         response = openai.ChatCompletion.create(
@@ -17,11 +18,13 @@ def gpt4_query(messages):
     except Exception as e:
         return f"Error: {str(e)}"
 
+
 def load_data(file_path):
     if file_path.name.endswith('.csv'):
         return pd.read_csv(file_path)
     else:
         return pd.read_excel(file_path)
+
 
 def visualize_data(code):
     try:
@@ -29,10 +32,12 @@ def visualize_data(code):
     except Exception as e:
         st.error(f"Error executing code: {e}")
 
+
 def dataframe_to_text(df):
     if isinstance(df, pd.DataFrame):
         return df.to_string(index=False)
     return "No data available for the selected dataset."
+
 
 def chat_gpt_generate_response(prompt):
     try:
@@ -43,6 +48,7 @@ def chat_gpt_generate_response(prompt):
         return response.choices[0].message['content'] if response.choices else "No response."
     except Exception as e:
         return f"Error in generating response: {e}"
+
 
 def ask_chatgpt_about_data(query, data, response_type, color, bgcolor, title_size, axis_label_size, legend_size):
     data_as_text = dataframe_to_text(data)
@@ -68,6 +74,7 @@ def ask_chatgpt_about_data(query, data, response_type, color, bgcolor, title_siz
         st.code(response, language='python')
         visualize_data(response)
     return response
+
 
 # Create the Streamlit app
 st.set_page_config(layout="wide")
@@ -103,8 +110,7 @@ if uploaded_file is not None:
     df = load_data(uploaded_file)
     st.session_state.selected_datasets = df.columns.tolist()
 
-    # Create columns for layout
-     col = st.container()
+    col = st.container()
 
     with col:
         st.subheader("Data Visualization")
@@ -136,12 +142,17 @@ if uploaded_file is not None:
             short_label_questions = df['Short Label Question'].unique()
             for question in short_label_questions:
                 st.subheader(question)
-                visualization_type = st.selectbox(f'Select the visualization type for {question}', ['Bar Chart', 'Line Chart', 'Pie Chart'], key=question)
+                visualization_type = st.selectbox(f'Select the visualization type for {question}',
+                                                  ['Bar Chart', 'Line Chart', 'Pie Chart'], key=question)
                 question_data = df[df['Short Label Question'] == question]
                 if visualization_type == 'Bar Chart':
-                    fig = px.bar(question_data, x='Attributes', y='Audience %', title=question, color='Attributes', text='Audience %')
+                    fig = px.bar(question_data, x='Attributes', y='Audience %', title=question, color='Attributes',
+                                 text='Audience %')
                     fig.update_traces(marker=dict(color=color))
-                    fig.update_layout(xaxis_title='Attributes', yaxis_title='Audience %', height=800, title_x=0.5, plot_bgcolor=bgcolor, title_font_size=title_size, xaxis_title_font_size=axis_label_size, yaxis_title_font_size=axis_label_size, legend_title_font_size=legend_size)
+                    fig.update_layout(xaxis_title='Attributes', yaxis_title='Audience %', height=800, title_x=0.5,
+                                      plot_bgcolor=bgcolor, title_font_size=title_size,
+                                      xaxis_title_font_size=axis_label_size, yaxis_title_font_size=axis_label_size,
+                                      legend_title_font_size=legend_size)
                     fig.update_xaxes(tickangle=90)
                     fig.update_traces(texttemplate='%{text:.2f}', textposition='outside')
                     st.plotly_chart(fig)
@@ -168,7 +179,8 @@ if uploaded_file is not None:
                 elif visualization_type == 'Pie Chart':
                     fig = px.pie(question_data, values='Audience %', names='Attributes', title=question)
                     fig.update_traces(marker=dict(colors=[color]))
-                    fig.update_layout(height=600, title_x=0.5, plot_bgcolor=bgcolor, title_font_size=title_size, legend_title_font_size=legend_size)
+                    fig.update_layout(height=600, title_x=0.5, plot_bgcolor=bgcolor, title_font_size=title_size,
+                                      legend_title_font_size=legend_size)
                     st.plotly_chart(fig)
         else:
             st.write("The dataset does not contain a column named 'Short Label Question'.")
