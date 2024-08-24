@@ -113,7 +113,7 @@ if uploaded_file is not None:
     col = st.container()
 
     with col:
-        st.subheader("Data Visualization")
+        st.subheader("")
         if 'messages' not in st.session_state:
             st.session_state['messages'] = [{"role": "assistant", "content": "How can I help you?"}]
         if 'history' not in st.session_state:
