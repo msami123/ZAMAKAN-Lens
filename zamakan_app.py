@@ -51,7 +51,7 @@ st.title('Your Audience Insights Begins Here.')
 # Sidebar for file upload and settings
 with st.sidebar:
     try:
-        with open(r"/Users/anody/Downloads/iAMAi-Viz-logo-03.png", "rb") as image_file:
+        with open(r"iAMAi-Viz-logo-03.png", "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
         img = f"<img src='data:image/png;base64,{encoded_string}' alt='App Logo' style='width:auto;height:auto;'>"
         st.markdown(img, unsafe_allow_html=True)
