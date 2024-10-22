@@ -9,3 +9,5 @@ plotly
 streamlit
 scikit-learn
 openpyxl
+python-pptx
+kaleido
